@@ -1,10 +1,12 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="changeIndex1">
+      <div @mouseleave="changeIndex1" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
+        <!-- 过渡动画 -->
+        <transition name="sort">
         <!-- 三级联动 -->
-        <div class="sort">
+        <div class="sort" v-show="show">
           <div class="all-sort-list2" @click="goSearch">
             <!-- 一级分类                      添加一个动态类名，当currentIndex等于它某个index给他添加一个类名cur -->
             <div
@@ -58,6 +60,8 @@
             </div>
           </div>
         </div>
+        </transition>
+        
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -83,12 +87,17 @@ export default {
     return {
       //存储用户鼠标移到哪一个一级分类
       currentIndex: -1, //谁都没有移上
+      show:true
     };
   },
   mounted() {
     //通知vuex发请求，获取数据，存储于仓库当中
-    //进行派遣
-    this.$store.dispatch("categoryList");
+    //进行派遣，派发action
+    /* this.$store.dispatch("categoryList"); */
+    //如果是在search页面，将sort隐藏
+    if(this.$route.path!='/home'){
+      this.show=false
+    }
   },
   computed: {
     ...mapState({
@@ -108,6 +117,10 @@ export default {
     //鼠标移出的回调，currentIndex变为-1，这样就取消了鼠标进入的背景样式
     changeIndex1() {
       this.currentIndex = -1;
+      //当现在不是在home内时，可以配合enterShow来实现鼠标移入移出控制一级分类的展出
+      if(this.$route.path!="/home"){
+        this.show=false
+      }
     },
     //编程式路由
     goSearch: function (event) {
@@ -145,11 +158,14 @@ export default {
         console.log(location)
       }
     },
+    enterShow(){
+      this.show=true
+    }
   },
 };
 </script>
 <style lang="less" scoped>
-.type-nav {
+.type-nav { 
   border-bottom: 2px solid #e1251b;
 
   .container {
@@ -188,8 +204,11 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+      overflow: hidden;
 
       .all-sort-list2 {
+        
+        
         .item {
           h3 {
             line-height: 27.2px;
@@ -265,6 +284,19 @@ export default {
           }
         }
       }
+    }
+    //定义动画的样式
+    //动画进入前
+    .sort-enter{
+     height: 0px; 
+    }
+    //动画进入后
+    .sort-enter-to{
+      height: 461px;
+    }
+    //设置动画的时间，速率
+    .sort-enter-active{
+      transition: all .5s linear;
     }
   }
 }

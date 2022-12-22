@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h2>params参数{{ $route.params}}</h2>
-    <h2>query参数{{ $route.query }}</h2>
+     <TypeNav></TypeNav>
   </div>
 </template>
 <script>
