@@ -179,9 +179,29 @@ https://www.swiper.com.cn/ 官网地址
 
 
 
+##
+开发home首页中的listContainer组件与Floor组件？
+但是服务器没有该部分的数据，
+所以我们要使用mock,用来模拟数据
+mock数据：如果你想mock数据，你需要用到插件mockjs插件，
+生成随机数据，拦截ajax数据
+前端mock的模拟数据不会和服务器进行通信
+
+使用步骤
+1 在src文件夹下建立一个mock文件夹
+2 第二步准备json数据，mock文件夹中创建相应的json文件.注意json字符串一定要格式化，不然跑不起来
+3 把mock数据需要的图片放在public文件夹中，public文件夹在打包的时候，会把相应的资源原封不动的打包到dist文件夹中
+4 第四步开始mock虚拟数据了，通过mockjs模块实现
+    创建mockServe.js文件
+5 mockServe.js文件在入口文件中引入
 
 
-
+##
+ListContainer 组件开发重点？
+安装Swiper插件：安装swiper@5
+ //第一步：引包（引入相应的css ,js）
+ //第二步：页面中结构务必要有结构，
+ //第三步，要确保结构有了之后再new swiper
 
 
 

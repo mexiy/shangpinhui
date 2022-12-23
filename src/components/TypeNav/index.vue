@@ -153,9 +153,14 @@ export default {
         //整理完参数
         //将两个参数变为一个参数
         location.query = query;
+        //判断：如果路由跳转的时候，带有params参数，捎带传递过去
+        if(this.$route.params){
+          location.params=this.$route.params
+        }
 
         this.$router.push(location);
         console.log(location)
+        
       }
     },
     enterShow(){
