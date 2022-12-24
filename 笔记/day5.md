@@ -85,9 +85,15 @@ nextTick官网解释:
 
 
 
-
+##
 3)开发Floor组件
 开发Floor组件：Floor组件它被复用的（重复使用两次）
+能否在floor组件中dispatch，得到响应数据呢？
+不能，因为页面中有两个floor
+如果在一个组件中dispath得到的数据无法v-for出两个floor
+我们应该在home路由组件中去发送dispath
+然后再home路由组件中遍历出两个Floor，这样数据再home组件中，floor要想获得数据，就涉及到父组件与子组件之间的传值
+
 
 3.1:Floor组件获取mock数据，发请求的action书写在哪里?
 派发action应该是在父组件的组件挂载完毕生命周期函数中书写，因为父组件需要通知Vuex发请求，父组件
@@ -104,11 +110,12 @@ nextTick官网解释:
 3.4组件间通信******面试必问的东西
 props:父子
 插槽:父子
-自定义事件:子父
+自定义事件:子父 $on $emit
 全局事件总线$bus:万能
 pubsub:万能
 Vuex:万能
 $ref:父子通信
+
 3.5为什么在Floor组件的mounted中初始化SWiper实例轮播图可以使用.
 因为父组件的mounted发请求获取Floor组件，当父组件的mounted执行的时候。
 Floor组件结构可能没有完整，但是服务器的数据回来以后Floor组件结构就一定是完成的了

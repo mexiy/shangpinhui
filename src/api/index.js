@@ -17,3 +17,6 @@ export const reqCategoryList =()=>{
 
 //获取banner
 export const reqGetBannerList=()=>mockRequest.get("/banner")
+
+//获取floor
+export const reqGetFloorList=()=>mockRequest.get("/floor")

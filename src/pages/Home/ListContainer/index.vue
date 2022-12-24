@@ -4,28 +4,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
-            </div>
-           <!--  <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Carousel :list="bannerList"></Carousel>
       </div>
       <div class="right">
         <div class="news">
@@ -106,14 +85,59 @@ import { mapState } from 'vuex';
 export default {
   name: "ListContainer",
   mounted(){
+    //组件挂载完毕
     //派发action ：通知vuex发起ajax请求，将数据存储在仓库中
-    this.$store.dispatch('getBannerList')
+    this.$store.dispatch('getBannerList');
   },
   computed:{
     ...mapState({
     bannerList:state=>state.home.bannerList
   })
-  }
+  },
+  //由于轮播图组件化了，就不需要以下代码
+  /* watch:{
+    //监听bannerList数据的变化：因为这条数据发生过变化--有空数组变为数组里边有四个元素
+    bannerList:{
+      //事件句柄
+      handler(newValue,oldValue){
+        //现在咱们通过watch监听bannerList属性的属性值变化
+        //如果执行handler方法，代表组件实例身上这个属性的属性已经发生了变化
+        //当前这个函数执行：只能保证bannerList数据有了，不能保证v-for已经执行结束了
+        //要使用watch+nextTick
+        //nextTick在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
+       this.$nextTick(()=>{
+        var mySwiper = new Swiper (
+          // '.swiper-container ', 
+          this.$refs.mySwiper,
+          {
+      // direction: 'vertical', // 垂直切换选项 
+      //不开启上述，默认是水平的
+      loop: true, // 循环模式选项
+      // autoplay:true, 
+      // 如果需要分页器
+      pagination: {
+        el: '.swiper-pagination',
+        //点击小球时也可以切换
+        clickable:true,
+        
+      },
+      
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      
+      // 如果需要滚动条
+      scrollbar: {
+        el: '.swiper-scrollbar',
+      }, })  
+       })
+
+      }
+    }
+
+  } */
   
 };
 </script>

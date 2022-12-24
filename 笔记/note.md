@@ -13,3 +13,8 @@ mapState()函数接收了一个对象。
 对象的第三个属性是一个string类型，nameAlias: 'name'，映射 this.nameAlias 为 store.state.name的值， 和第一个属性的用法本质是一致的，不过这里映射出的计算属性的名称与 state 的子节点名称不同。
 
 对象的第四个属性是一个普通函数，普通函数和箭头函数的不同之处在于，普通函数中的this指向了vue实例，因为可以访问到当前组件的局部状态，比如this.tempcount。
+
+##在我们学习了vue之后操作Dom我们就可以不用选择器了，可以用ref
+将节点中的id换为ref，然后获取节点用this.$refs.
+
+api文件夹下。request是对ajax的重写，所以request.get其实就是ajax.get
