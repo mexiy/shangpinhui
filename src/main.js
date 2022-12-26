@@ -21,6 +21,10 @@ Vue.config.productionTip = false
 import store from "@/store"
 new Vue({
   render: h => h(App),
+  //配置全局事件总线$bus
+  beforeCreate(){
+    Vue.prototype.$bus=this;
+  },
   router,
   //注册之后组件就会多了一个$store属性
   store

@@ -18,3 +18,5 @@ mapState()函数接收了一个对象。
 将节点中的id换为ref，然后获取节点用this.$refs.
 
 api文件夹下。request是对ajax的重写，所以request.get其实就是ajax.get
+
+

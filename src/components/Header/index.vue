@@ -68,14 +68,24 @@ export default {
    
     }) */
       //如果路由有query参数带上
+      let location = { name: "search", params: { keyword: this.keyword ||undefined} };
       if (this.$route.query) {
-        let location = { name: "search", params: { keyword: this.keyword ||undefined} };
         location.query = this.$route.query;
-        this.$router.push(location);
       }
+      this.$router.push(location);
       
+
     },
   },
+  mounted(){
+    //通过全局事件总线清除关键字
+    /* vm.$emit( event, arg ) //触发当前实例上的事件
+      vm.$on( event, fn );//监听event事件后运行 fn； */
+      //监听clear事件，在得到search页面发来的触发信号执行
+    this.$bus.$on("clear",()=>{
+      this.keyword="";
+    })
+  }
 };
 </script>
 <style scoped lang="less">

@@ -11,15 +11,20 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 三级列表的面包屑 -->
+            <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i
+                @click="removeCategoryName">×</i></li>
+            <!-- 搜索框的面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword">{{ searchParams.keyword }}<i @click="removeKeyword">×</i></li>
+            <!-- 点击品牌的面包屑 由于参数中的trademark是类似 "2:小米"这样的，所以我们不能直接将其变为面包屑，需要对其进行切割，用：切割，取数组第1个-->
+            <li class="with-x" v-if="searchParams.trademark">{{ searchParams.trademark.split(":")[1]}}<i @click="removetrademark()">×</i></li>
+            <!-- 点击产品属性产生的面包屑 -->
+            <li class="with-x" v-for="(attrValue,index) in searchParams.props" :key="index">{{ attrValue.split(":")[1]}}<i @click="removattrValue(index)">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrValueInfo="attrValueInfo" />
 
         <!--details-->
         <div class="details clearfix">
@@ -64,23 +69,15 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    <a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">{{
+                        goods.title
+                    }}</a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a
-                      href="success-cart.html"
-                      target="_blank"
-                      class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
-                    >
+                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
@@ -157,28 +154,28 @@ export default {
     };
   },
   //生命周期函数
-  beforeCreate() {},
-  created() {},
+  beforeCreate() { },
+  created() { },
   beforeMount() {
-   /*  this.searchParams.category1Id = this.$route.query.category1Id;
-    this.searchParams.category2Id = this.$route.query.category2Id;
-    this.searchParams.category3Id = this.$route.query.category3Id;
-    this.searchParams.categoryName = this.$route.query.categoryName;
-    this.searchParams.keyword = this.$route.params.keyword; */
+    /*  this.searchParams.category1Id = this.$route.query.category1Id;
+     this.searchParams.category2Id = this.$route.query.category2Id;
+     this.searchParams.category3Id = this.$route.query.category3Id;
+     this.searchParams.categoryName = this.$route.query.categoryName;
+     this.searchParams.keyword = this.$route.params.keyword; */
     //es6新语法，让里面的进行合并，去并集
-    Object.assign(this.searchParams,this.$route.query,this.$route.params)
+    Object.assign(this.searchParams, this.$route.query, this.$route.params)
   },
   mounted() {
     this.getData();
   },
   unpdated() {
-    
+
   },
   //将仓库的数据映射到组件
   computed: {
     //mapGetters传递的是数组
     ...mapGetters(["goodsList"]),
-    
+
   },
   methods: {
     //像服务器发送请求获取search模块数据，根据参数不同返回不同的数据进行展示
@@ -186,7 +183,92 @@ export default {
     getData() {
       this.$store.dispatch("getSearchInfo", this.searchParams);
     },
+    removeCategoryName() {
+      //面包屑业务
+      //把带给服务器的参数置空了
+      //带给服务器参数说明可有可无的：如果属性值为空还是会带给服务器
+      //可以给他赋值空，this.searchParams.categoryName="",为了节省消耗，可以让它为undefined
+      this.searchParams.categoryName = undefined
+      this.searchParams.category1Id = undefined
+      this.searchParams.category2Id = undefined
+      this.searchParams.category3Id = undefined
+      this.getData()
+      //地址栏也需要修改,点×之后进行路由跳转
+      /* if(this.$route.params) */
+      //本意是删除query,如果路径当中出现params，应该携带params进行路由跳转
+      this.$router.push({ name: "search", params: this.$route.params })
+    },
+    removeKeyword() {
+      //搜索栏生成的面包屑删除触发
+      this.searchParams.keyword = undefined
+      this.getData()
+      //通知兄弟组件header要将搜索栏中的关键字删除
+      /* vm.$emit( event, arg ) //触发当前实例上的事件
+      vm.$on( event, fn );//监听event事件后运行 fn； */
+      this.$bus.$emit("clear")//触发全局事件总线上的clear事件，
+      //当我们同时使用三级列表，和搜索框两个搜索条件时，将搜索框的面包屑删除，要保证清除的只是搜索的条件，也就是params参数
+      //但是要保证三级列表搜索条件存在，也就是query参数
+      if (this.$route.query) {
+        this.$push({ name: "search", query: this.$route.query })
+      }
+    },
+    //点击品牌自定义事件的回调
+    trademarkInfo(trademark) {
+      //通过查看api文档我们知道trademark参数应该是什么样的格式
+      //`${}` ``表示的是按照此格式，${}里放的是变量
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
+
+      this.getData()
+    },
+    //去除点击品牌产生的面包屑
+    removetrademark(){
+      this.searchParams.trademark=undefined
+      this.getData()
+      this.$router.push({
+        name:"search",
+        query:this.$route.query,
+        params:this.$route.params
+      })
+    },
+    //点击属性自定事件回调
+    attrValueInfo(attr,attrValue){
+      let props=`${attr.attrId}:${attrValue}:${attr.attrName}`
+      
+        //判断是否有重复项,去重
+        if(this.searchParams.props.indexOf(props)==-1)
+        {
+          //返回-1表示props不在this.searchParams.props中
+          //将上面每次得到的props推到参数的props中
+        this.searchParams.props.push(props)
+        }
+        //再次请求数据
+        this.getData()
+      },
+    //去除点击属性产生的面包屑,删除对应的
+     removattrValue(index){
+      //删除数组中指定下标的元素
+      this.searchParams.props.splice(index,1)
+      this.getData()
+      this.$router.push({
+        name:"search",
+        query:this.$route.query,
+        params:this.$route.params
+      })
+     } 
+    
   },
+  watch: {
+    //监听属性,不用加this，路由信息更新就再次发送请求
+    $route(newValue, oldValue) {
+      //再次发送请求之前整理带给服务器参数
+      Object.assign(this.searchParams, this.$route.query, this.$route.params)
+      this.getData()
+      //由于每次请求完毕，应该把相应的1，2，3级分类id置空，让他接收下一次的相应id
+      this.searchParams.category1Id = ""
+      this.searchParams.category2Id = ""
+      this.searchParams.category3Id = ""
+    }
+  }
 };
 </script>
 
