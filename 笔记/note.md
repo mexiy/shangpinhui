@@ -19,4 +19,17 @@ mapState()函数接收了一个对象。
 
 api文件夹下。request是对ajax的重写，所以request.get其实就是ajax.get
 
+当面包屑中的关键字清除以后，需要让兄弟组件Header组件中的关键字清除，也就是搜索框内的文本清除
+这就涉及到了组件间的通讯
+props:父子通讯
+自定义事件：子父(例如在search中的trademarkInfo)
+vuex：仓库数据
+插槽：父子
+pubsub-js
+$bus:全局事件总线
 
+开发某一个页面的步骤
+1：静态组件
+2：发请求
+3：vuex
+4：动态展示组件

@@ -117,7 +117,7 @@ push与replace是有区别的
 
 
 7)滚动行为的设置。
-
+ vue-router里有该接口
 
 
 

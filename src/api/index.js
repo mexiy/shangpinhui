@@ -39,6 +39,11 @@ export const reqGetSearchInfo=(params)=>requests({
     url:"/list",
     method: "post",
    data:params
-}) 
+})
+
+//获取商品详情  /api/item/{ skuId },
+//注意路径上直接带参，一定要写成模板字符串，并用${}括住变量
+export const reqGetGoodsInfo=(skuId)=> requests({ url:`/item/${skuId}`,method:"get"})
+
 
 

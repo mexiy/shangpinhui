@@ -1,12 +1,10 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
+
 /* 使用插件 */
 Vue.use(VueRouter)
-/* 引入路由组件 */
-import Home from "@/pages/Home"
-import Login from "@/pages/Login"
-import Register from "@/pages/Register"
-import Search from "@/pages/Search"
+//引入路由配置
+import routes from "./routes"
 
 /* 先把VueRouter原型对象的push,先保存一份 */
 let originPush=VueRouter.prototype.push;
@@ -31,41 +29,13 @@ VueRouter.prototype.replace = function(location,resolve,reject){
         originReplace.call(this,location,()=>{},()=>{})
     }
 }
-
 export default new VueRouter({
     /* 配置路由 */
+    routes,
+    //滚动行为
+    scrollBehavior(to, from, savedPosition) {
+        // 始终滚动到顶部
+        return { y: 0 }
+      }
     
-    routes:[
-        {
-            path:'/home',
-            component:Home,
-            meta:{show:true}
-        },
-        {
-            path:'/login',
-            component:Login,
-            meta:{show:false}
-        },
-        {
-            path:'/register',
-            component:Register,
-            meta:{show:false}
-        },
-        {
-            name:'search',
-            path:'/search:keyword?',
-            component:Search,
-            meta:{show:true},
-            /* props:true */
-            /* props:{a:1,b:2} */
-            /* props:($route)=>{
-                return{keyword:$route.params.keyword,k:$route.query.k}
-            } */
-        },
-        {
-            /* 重定向 */
-            path:'/',
-            redirect:'home'
-        }
-    ]
 })
