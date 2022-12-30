@@ -4,12 +4,14 @@ import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import Search from "@/pages/Search"
 import Detail from "@/pages/Detail"
+import AddCartSuccess from "@/pages/AddCartSuccess"
 //路由配置
 export default [
         {
             path:'/home',
             component:Home,
             meta:{show:true}
+            //meta是用来表示是否显示footer
         },
         {
             path:'/login',
@@ -32,6 +34,12 @@ export default [
             /* props:($route)=>{
                 return{keyword:$route.params.keyword,k:$route.query.k}
             } */
+        },
+        {
+           name:"addcartsuccess",
+            path:"/addcartsuccess",
+            component:AddCartSuccess,
+            meta:{show:true}
         },
         {
             name:'detail',

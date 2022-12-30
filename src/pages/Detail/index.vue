@@ -7,31 +7,30 @@
     <section class="con">
       <!-- 导航路径区域 -->
       <div class="conPoin">
-        <span>手机、数码、通讯</span>
-        <span>手机</span>
-        <span>Apple苹果</span>
-        <span>iphone 6S系类</span>
+        <span v-show="categoryView.category1Name">{{ categoryView.category1Name }}</span>
+        <span v-show="categoryView.category2Name">{{ categoryView.category2Name }}</span>
+        <span v-show="categoryView.category3Name">{{ categoryView.category3Name }}</span>
       </div>
       <!-- 主要内容区域 -->
       <div class="mainCon">
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom :skuImageList="skuImageList" />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList :skuImageList="skuImageList" />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
           <div class="goodsDetail">
-            <h3 class="InfoName">Apple iPhone 6s（A1700）64G玫瑰金色 移动通信电信4G手机</h3>
-            <p class="news">推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返</p>
+            <h3 class="InfoName">{{ skuInfo.skuName }}</h3>
+            <p class="news">{{ skuInfo.skuDesc }}</p>
             <div class="priceArea">
               <div class="priceArea1">
                 <div class="title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</div>
                 <div class="price">
                   <i>¥</i>
-                  <em>5299</em>
+                  <em>{{ skuInfo.price }}</em>
                   <span>降价通知</span>
                 </div>
                 <div class="remark">
@@ -56,7 +55,7 @@
               </div>
               <div class="supportArea">
                 <div class="title">配 送 至</div>
-                <div class="fixWidth">广东省 深圳市 宝安区</div>
+                <div class="fixWidth">雷瑟守备 下路 三角草</div>
               </div>
             </div>
           </div>
@@ -64,39 +63,25 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
+              <!-- 定义列表 -->
+              <dl v-for="(attrList, index) in spuSaleAttrList" :key="attrList.id">
+                <dt class="title">{{ attrList.saleAttrName }}</dt>
+                <dd changepirce="0" v-for="(attrValueList, index) in attrList.spuSaleAttrValueList"
+                  :key="attrValueList.id" :class="{ active: attrValueList.isChecked == 1 }"
+                  @click="changeActive(attrValueList, attrList.spuSaleAttrValueList)">
+                  {{ attrValueList.saleAttrValueName }}</dd>
+
               </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
-              </dl>
+
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt">
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSukNum" />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a href="javascript:" class="mins" @click="skuNum > 1 ? skuNum-- : skuNum = 1">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a @click="addShopCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -347,239 +332,392 @@
 </template>
 
 <script>
-  import ImageList from './ImageList/ImageList'
-  import Zoom from './Zoom/Zoom'
+import ImageList from './ImageList/ImageList'
+import Zoom from './Zoom/Zoom'
+import { mapGetters } from 'vuex'
 
-  export default {
-    name: 'Detail',
-    
-    components: {
-      ImageList,
-      Zoom
+export default {
+  name: 'Detail',
+  data() {
+    return {
+      //购买产品的个数
+      skuNum: 0,
+    }
+  },
+
+  components: {
+    ImageList,
+    Zoom
+  },
+  mounted() {
+    //派发请求获取信息
+    this.$store.dispatch("getGoodsInfo", this.$route.params.skuId)
+  },
+  computed: {
+    ...mapGetters(['categoryView', "skuInfo", "spuSaleAttrList"]),
+    //给子组件的数据,因为当skuInfo中数据还没有的时候，防止传入的是undefined，传入一个空数组
+    skuImageList() {
+      return this.skuInfo.skuImageList || [];
+    }
+  },
+  methods: {
+    //实现详情页用ischecked来控制选中项的高亮业务（排他）
+    changeActive(saleAttrValue, attr) {
+      //遍历全部售卖属性ischecked为零没有高亮了
+      attr.forEach(element => {
+        element.isChecked = "0"
+      });
+      //点击的那个售卖属性有高亮
+      saleAttrValue.isChecked = "1"
     },
-    mounted(){
-      //派发请求获取信息
-      this.$store.dispatch("getGoodsInfo",this.$route.params.skuId)
+    //利用输入框传入数值
+    //我们要排除用户输入不是数字的情况，可以让用户输入的内容*1，若是输入的是非数字，*1后为NaN
+    changeSukNum(event) {
+      //用户输入的文本*1
+      let value = event.target._value * 1
+      //判断是否为NaN,或负数
+      if (isNaN(value) || value < 1) {
+        this.skuNum = 1
+      } else {
+        //正常情况
+        this.skuNum = parseInt(value)
+      }
+
+    },
+    //加入购物车回调函数
+    async addShopCart() {
+      //1 发请求 将产品加入数据库（通知服务器）
+      /*加入购物车后会获得一个状态码，用来判断是成功还是失败，进行相应的操作 
+      this.$store.dispatch("addOrUpdateShopCart",{skuId:this.$route.params.skuId,skuNum:this.skuNum})
+      */
+      //返回的是promise
+      try {
+        let result=await this.$store.dispatch("addOrUpdateShopCart", { skuId: this.$route.params.skuId, skuNum: this.skuNum })
+       /*  console.log(result) */
+        //经行路由跳转
+        //路由跳转的时候还需要将产品的信息带上
+        //一些简单的数据skuNum，通过query形式给路由组件传递过去
+        //产品信息的数据,比较复杂的skuInfo，通过会话存储（不持久化）
+        sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo))
+        this.$router.push({name:"addcartsuccess",params:{'skuNum':this.skuNum}})
+      }catch(error){
+        alert(error.message)
+      }
+      //2 服务器存储成功，进行路由跳转，传递参数
+      //3 失败，给用户进行提示
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-  .detail {
-    .con {
-      width: 1200px;
-      margin: 15px auto 0;
+.detail {
+  .con {
+    width: 1200px;
+    margin: 15px auto 0;
 
-      .conPoin {
-        padding: 9px 15px 9px 0;
+    .conPoin {
+      padding: 9px 15px 9px 0;
 
-        &>span+span:before {
-          content: "/\00a0";
-          padding: 0 5px;
-          color: #ccc;
-        }
+      &>span+span:before {
+        content: "/\00a0";
+        padding: 0 5px;
+        color: #ccc;
+      }
+    }
+
+    .mainCon {
+      overflow: hidden;
+      margin: 5px 0 15px;
+
+      .previewWrap {
+        float: left;
+        width: 400px;
+        position: relative;
       }
 
-      .mainCon {
-        overflow: hidden;
-        margin: 5px 0 15px;
+      .InfoWrap {
+        width: 700px;
+        float: right;
 
-        .previewWrap {
-          float: left;
-          width: 400px;
-          position: relative;
+        .InfoName {
+          font-size: 14px;
+          line-height: 21px;
+          margin-top: 15px;
         }
 
-        .InfoWrap {
-          width: 700px;
-          float: right;
+        .news {
+          color: #e12228;
+          margin-top: 15px;
+        }
 
-          .InfoName {
-            font-size: 14px;
-            line-height: 21px;
-            margin-top: 15px;
-          }
+        .priceArea {
+          background: #fee9eb;
+          padding: 7px;
+          margin: 13px 0;
 
-          .news {
-            color: #e12228;
-            margin-top: 15px;
-          }
+          .priceArea1 {
+            overflow: hidden;
+            line-height: 28px;
+            margin-top: 10px;
 
-          .priceArea {
-            background: #fee9eb;
-            padding: 7px;
-            margin: 13px 0;
+            .title {
+              float: left;
+              margin-right: 15px;
+            }
 
-            .priceArea1 {
-              overflow: hidden;
-              line-height: 28px;
-              margin-top: 10px;
+            .price {
+              float: left;
+              color: #c81623;
 
-              .title {
-                float: left;
-                margin-right: 15px;
+              i {
+                font-size: 16px;
               }
 
-              .price {
-                float: left;
-                color: #c81623;
-
-                i {
-                  font-size: 16px;
-                }
-
-                em {
-                  font-size: 24px;
-                  font-weight: 700;
-                }
-
-                span {
-                  font-size: 12px;
-                }
+              em {
+                font-size: 24px;
+                font-weight: 700;
               }
 
-              .remark {
-                float: right;
+              span {
+                font-size: 12px;
               }
             }
 
-            .priceArea2 {
-              overflow: hidden;
-              line-height: 28px;
-              margin-top: 10px;
-
-              .title {
-                margin-right: 15px;
-                float: left;
-              }
-
-              .fixWidth {
-                width: 520px;
-                float: left;
-
-                .red-bg {
-                  background: #c81623;
-                  color: #fff;
-                  padding: 3px;
-                }
-
-                .t-gray {
-                  color: #999;
-                }
-              }
+            .remark {
+              float: right;
             }
-
-
           }
 
-          .support {
-            border-bottom: 1px solid #ededed;
-            padding-bottom: 5px;
+          .priceArea2 {
+            overflow: hidden;
+            line-height: 28px;
+            margin-top: 10px;
 
-            .supportArea {
-              overflow: hidden;
-              line-height: 28px;
-              margin-top: 10px;
+            .title {
+              margin-right: 15px;
+              float: left;
+            }
 
-              .title {
-                margin-right: 15px;
-                float: left;
+            .fixWidth {
+              width: 520px;
+              float: left;
+
+              .red-bg {
+                background: #c81623;
+                color: #fff;
+                padding: 3px;
               }
 
-              .fixWidth {
-                width: 520px;
-                float: left;
+              .t-gray {
                 color: #999;
               }
             }
           }
 
-          .choose {
-            .chooseArea {
+
+        }
+
+        .support {
+          border-bottom: 1px solid #ededed;
+          padding-bottom: 5px;
+
+          .supportArea {
+            overflow: hidden;
+            line-height: 28px;
+            margin-top: 10px;
+
+            .title {
+              margin-right: 15px;
+              float: left;
+            }
+
+            .fixWidth {
+              width: 520px;
+              float: left;
+              color: #999;
+            }
+          }
+        }
+
+        .choose {
+          .chooseArea {
+            overflow: hidden;
+            line-height: 28px;
+            margin-top: 10px;
+
+            dl {
               overflow: hidden;
-              line-height: 28px;
-              margin-top: 10px;
+              margin: 13px 0;
 
-              dl {
-                overflow: hidden;
-                margin: 13px 0;
+              dt {
+                margin-right: 15px;
+                float: left;
+              }
 
-                dt {
-                  margin-right: 15px;
-                  float: left;
-                }
+              dd {
+                float: left;
+                margin-right: 5px;
+                color: #666;
+                line-height: 24px;
+                padding: 2px 14px;
+                border-top: 1px solid #eee;
+                border-right: 1px solid #bbb;
+                border-bottom: 1px solid #bbb;
+                border-left: 1px solid #eee;
 
-                dd {
-                  float: left;
-                  margin-right: 5px;
-                  color: #666;
-                  line-height: 24px;
-                  padding: 2px 14px;
-                  border-top: 1px solid #eee;
-                  border-right: 1px solid #bbb;
-                  border-bottom: 1px solid #bbb;
-                  border-left: 1px solid #eee;
-
-                  &.active {
-                    color: green;
-                    border: 1px solid green;
-                  }
+                &.active {
+                  color: green;
+                  border: 1px solid green;
                 }
               }
             }
+          }
 
-            .cartWrap {
-              .controls {
-                width: 48px;
-                position: relative;
+          .cartWrap {
+            .controls {
+              width: 48px;
+              position: relative;
+              float: left;
+              margin-right: 15px;
+
+              .itxt {
+                width: 38px;
+                height: 37px;
+                border: 1px solid #ddd;
+                color: #555;
                 float: left;
-                margin-right: 15px;
-
-                .itxt {
-                  width: 38px;
-                  height: 37px;
-                  border: 1px solid #ddd;
-                  color: #555;
-                  float: left;
-                  border-right: 0;
-                  text-align: center;
-                }
-
-                .plus,
-                .mins {
-                  width: 15px;
-                  text-align: center;
-                  height: 17px;
-                  line-height: 17px;
-                  background: #f1f1f1;
-                  color: #666;
-                  position: absolute;
-                  right: -8px;
-                  border: 1px solid #ccc;
-                }
-
-                .mins {
-                  right: -8px;
-                  top: 19px;
-                  border-top: 0;
-                }
-
-                .plus {
-                  right: -8px;
-                }
+                border-right: 0;
+                text-align: center;
               }
 
-              .add {
-                float: left;
+              .plus,
+              .mins {
+                width: 15px;
+                text-align: center;
+                height: 17px;
+                line-height: 17px;
+                background: #f1f1f1;
+                color: #666;
+                position: absolute;
+                right: -8px;
+                border: 1px solid #ccc;
+              }
 
-                a {
-                  background-color: #e1251b;
-                  padding: 0 25px;
-                  font-size: 16px;
-                  color: #fff;
-                  height: 36px;
-                  line-height: 36px;
-                  display: block;
+              .mins {
+                right: -8px;
+                top: 19px;
+                border-top: 0;
+              }
+
+              .plus {
+                right: -8px;
+              }
+            }
+
+            .add {
+              float: left;
+
+              a {
+                background-color: #e1251b;
+                padding: 0 25px;
+                font-size: 16px;
+                color: #fff;
+                height: 36px;
+                line-height: 36px;
+                display: block;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .product-detail {
+    width: 1200px;
+    margin: 30px auto 0;
+    overflow: hidden;
+
+    .aside {
+      width: 210px;
+      float: left;
+      border: 1px solid #ccc;
+
+      .tabWraped {
+        height: 40px;
+
+        h4 {
+          border-top: 3px solid #fff;
+          float: left;
+          line-height: 37px;
+          width: 105px;
+          text-align: center;
+          border-bottom: 1px solid #ccc;
+
+          &.active {
+            border-top: 3px solid #e1251b;
+            border-bottom: 0;
+            font-weight: normal;
+          }
+        }
+      }
+
+      .tabContent {
+        padding: 10px;
+
+        .tab-pane {
+          display: none;
+
+          &.active {
+            display: block;
+          }
+
+          &:nth-child(1) {
+            .partList {
+              overflow: hidden;
+
+              li {
+                width: 50%;
+                float: left;
+                border-bottom: 1px dashed #ededed;
+                line-height: 28px;
+              }
+            }
+
+            .goodsList {
+              &>li {
+                margin: 5px 0 15px;
+                border-bottom: 1px solid #ededed;
+                padding-bottom: 5px;
+
+                .list-wrap {
+                  .p-img {
+                    text-align: center;
+
+                    img {
+                      width: 152px;
+                    }
+                  }
+
+                  .price {
+                    font-size: 16px;
+                    color: #c81623;
+                  }
+
+                  .operate {
+                    text-align: center;
+                    margin: 5px 0;
+
+                    a {
+                      background-color: transparent;
+                      border: 1px solid #8c8c8c;
+                      color: #8c8c8c;
+                      display: inline-block;
+                      padding: 2px 14px;
+                      line-height: 18px;
+                    }
+                  }
                 }
               }
             }
@@ -588,38 +726,158 @@
       }
     }
 
-    .product-detail {
-      width: 1200px;
-      margin: 30px auto 0;
-      overflow: hidden;
+    .detail {
+      width: 980px;
+      float: right;
 
-      .aside {
-        width: 210px;
-        float: left;
-        border: 1px solid #ccc;
+      .fitting {
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
 
-        .tabWraped {
-          height: 40px;
+        .kt {
+          border-bottom: 1px solid #ddd;
+          background: #f1f1f1;
+          color: #333;
+          padding: 5px 0 5px 15px;
+        }
 
-          h4 {
-            border-top: 3px solid #fff;
-            float: left;
-            line-height: 37px;
-            width: 105px;
+        .good-suits {
+          height: 170px;
+          padding-top: 10px;
+
+          .master {
+            width: 127px;
+            height: 165px;
             text-align: center;
-            border-bottom: 1px solid #ccc;
+            position: relative;
+            float: left;
+
+            img {
+              width: 87px;
+            }
+
+            p {
+              color: #c81623;
+              font-size: 16px;
+              font-weight: 700;
+            }
+
+            i {
+              position: absolute;
+              top: 48px;
+              right: -25px;
+              font-size: 16px;
+            }
+          }
+
+          .suits {
+            width: 668px;
+            height: 165px;
+            float: left;
+
+            .suitsItem {
+              float: left;
+              width: 127px;
+              padding: 0 20px;
+              text-align: center;
+
+              img {
+                width: 120px;
+                height: 130px;
+              }
+
+              p {
+                font-size: 12px;
+              }
+
+              label {
+                display: block;
+                position: relative;
+
+                input {
+                  vertical-align: middle;
+                }
+
+                span {
+                  vertical-align: middle;
+                }
+              }
+            }
+          }
+
+          .result {
+            border-left: 1px solid #ddd;
+            width: 153px;
+            height: 165px;
+            padding-left: 20px;
+            float: left;
+
+            .num {
+              font-size: 14px;
+              margin-bottom: 10px;
+              margin-top: 10px;
+            }
+
+            .price-tit {
+              font-weight: bold;
+              margin-bottom: 10px;
+            }
+
+            .price {
+              color: #B1191A;
+              font-size: 16px;
+              margin-bottom: 10px;
+            }
+
+            .addshopcar {
+              background-color: #e1251b;
+              border: 1px solid #e1251b;
+              padding: 10px 25px;
+              font-size: 16px;
+              color: #fff;
+              display: inline-block;
+              box-sizing: border-box;
+            }
+          }
+        }
+      }
+
+      .intro {
+        .tab-wraped {
+          background: #ededed;
+          // border: 1px solid #ddd;
+          overflow: hidden;
+
+          li {
+            float: left;
+
+            &+li>a {
+              border-left: 1px solid #ddd;
+            }
 
             &.active {
-              border-top: 3px solid #e1251b;
-              border-bottom: 0;
-              font-weight: normal;
+              a {
+                // border: 0;
+                background: #e1251b;
+                color: #fff;
+              }
+            }
+
+            a {
+              display: block;
+              height: 40px;
+              line-height: 40px;
+              padding: 0 11px;
+              text-align: center;
+              color: #666;
+              background: #fcfcfc;
+              border-top: 1px solid #ddd;
+              border-bottom: 1px solid #ddd;
             }
           }
         }
 
-        .tabContent {
-          padding: 10px;
-
+        .tab-content {
           .tab-pane {
             display: none;
 
@@ -628,237 +886,25 @@
             }
 
             &:nth-child(1) {
-              .partList {
-                overflow: hidden;
+              .goods-intro {
+                padding-left: 10px;
 
                 li {
-                  width: 50%;
-                  float: left;
-                  border-bottom: 1px dashed #ededed;
-                  line-height: 28px;
+                  margin: 10px 0;
                 }
               }
 
-              .goodsList {
-                &>li {
-                  margin: 5px 0 15px;
-                  border-bottom: 1px solid #ededed;
-                  padding-bottom: 5px;
-
-                  .list-wrap {
-                    .p-img {
-                      text-align: center;
-
-                      img {
-                        width: 152px;
-                      }
-                    }
-
-                    .price {
-                      font-size: 16px;
-                      color: #c81623;
-                    }
-
-                    .operate {
-                      text-align: center;
-                      margin: 5px 0;
-
-                      a {
-                        background-color: transparent;
-                        border: 1px solid #8c8c8c;
-                        color: #8c8c8c;
-                        display: inline-block;
-                        padding: 2px 14px;
-                        line-height: 18px;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .detail {
-        width: 980px;
-        float: right;
-
-        .fitting {
-          border: 1px solid #ddd;
-          margin-bottom: 15px;
-
-          .kt {
-            border-bottom: 1px solid #ddd;
-            background: #f1f1f1;
-            color: #333;
-            padding: 5px 0 5px 15px;
-          }
-
-          .good-suits {
-            height: 170px;
-            padding-top: 10px;
-
-            .master {
-              width: 127px;
-              height: 165px;
-              text-align: center;
-              position: relative;
-              float: left;
-
-              img {
-                width: 87px;
-              }
-
-              p {
-                color: #c81623;
-                font-size: 16px;
-                font-weight: 700;
-              }
-
-              i {
-                position: absolute;
-                top: 48px;
-                right: -25px;
-                font-size: 16px;
-              }
-            }
-
-            .suits {
-              width: 668px;
-              height: 165px;
-              float: left;
-
-              .suitsItem {
-                float: left;
-                width: 127px;
-                padding: 0 20px;
-                text-align: center;
-
+              .intro-detail {
                 img {
-                  width: 120px;
-                  height: 130px;
+                  width: 100%;
                 }
-
-                p {
-                  font-size: 12px;
-                }
-
-                label {
-                  display: block;
-                  position: relative;
-
-                  input {
-                    vertical-align: middle;
-                  }
-
-                  span {
-                    vertical-align: middle;
-                  }
-                }
-              }
-            }
-
-            .result {
-              border-left: 1px solid #ddd;
-              width: 153px;
-              height: 165px;
-              padding-left: 20px;
-              float: left;
-
-              .num {
-                font-size: 14px;
-                margin-bottom: 10px;
-                margin-top: 10px;
-              }
-
-              .price-tit {
-                font-weight: bold;
-                margin-bottom: 10px;
-              }
-
-              .price {
-                color: #B1191A;
-                font-size: 16px;
-                margin-bottom: 10px;
-              }
-
-              .addshopcar {
-                background-color: #e1251b;
-                border: 1px solid #e1251b;
-                padding: 10px 25px;
-                font-size: 16px;
-                color: #fff;
-                display: inline-block;
-                box-sizing: border-box;
-              }
-            }
-          }
-        }
-
-        .intro {
-          .tab-wraped {
-            background: #ededed;
-            // border: 1px solid #ddd;
-            overflow: hidden;
-
-            li {
-              float: left;
-
-              &+li>a {
-                border-left: 1px solid #ddd;
-              }
-
-              &.active {
-                a {
-                  // border: 0;
-                  background: #e1251b;
-                  color: #fff;
-                }
-              }
-
-              a {
-                display: block;
-                height: 40px;
-                line-height: 40px;
-                padding: 0 11px;
-                text-align: center;
-                color: #666;
-                background: #fcfcfc;
-                border-top: 1px solid #ddd;
-                border-bottom: 1px solid #ddd;
               }
             }
           }
 
-          .tab-content {
-            .tab-pane {
-              display: none;
-
-              &.active {
-                display: block;
-              }
-
-              &:nth-child(1) {
-                .goods-intro {
-                  padding-left: 10px;
-
-                  li {
-                    margin: 10px 0;
-                  }
-                }
-
-                .intro-detail {
-                  img {
-                    width: 100%;
-                  }
-                }
-              }
-            }
-
-          }
         }
       }
     }
   }
+}
 </style>

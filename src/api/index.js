@@ -45,5 +45,6 @@ export const reqGetSearchInfo=(params)=>requests({
 //注意路径上直接带参，一定要写成模板字符串，并用${}括住变量
 export const reqGetGoodsInfo=(skuId)=> requests({ url:`/item/${skuId}`,method:"get"})
 
-
+//加入购物车，或更新个数 /api/cart/addToCart/{ skuId }/{ skuNum }
+export const reqAddOrUpdateShopCart=(skuId,skuNum)=>requests({url:`/cart/addToCart/${ skuId }/${ skuNum }`,method:"post"})
 

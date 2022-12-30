@@ -1,18 +1,61 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="event"></div>
-    <div class="big">
-      <img src="../images/s1.png" />
+    <img :src="imgObj.imgUrl" />
+    <div class="event" @mousemove="handler"></div>
+    <div class="big" >
+      <img :src="imgObj.imgUrl"  ref="big"/>
     </div>
-    <div class="mask"></div>
+    <!-- 遮罩层 -->
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
   export default {
     name: "Zoom",
+    data(){
+      return{
+        //当前展示图片的索引值
+        currentIndex:0
+      }
+    },
+    props:["skuImageList"],
+  
+    computed: {
+    imgObj(){
+      //处理传过来的skuImageList，应为它可能是空数组，空数组加.imgUrl,会报错，空列表加.属性不会报错
+      return this.skuImageList[this.currentIndex]||{}
+    }
+  },
+  mounted(){
+    //全局事件总线，兄弟组件传来的索引值
+    this.$bus.$on("getIndex",(index)=>{
+      //修改当前显示图片的索引值
+      this.currentIndex=index
+    })
+  },
+  methods:{
+    handler(event){
+      let mask = this.$refs.mask
+      let big = this.$refs.big;
+      let left = event.offsetX - mask.offsetWidth/2;
+      let top = event.offsetY - mask.offsetHeight/2;
+      //约束范围
+      if(left<=0) left=0
+      if(left>=mask.offsetWidth) left=mask.offsetWidth
+      if(top<=0) top=0
+      if(top>=mask.offsetHeight) top=mask.offsetHeight
+      //修改元素的left|top的值
+      mask.style.left = left+'px';
+      mask.style.top = top+"px";
+      big.style.left = -2*left+"px"
+      big.style.top = -2*top+"px"
+      
+    }
   }
+  }
+
 </script>
 
 <style lang="less">
