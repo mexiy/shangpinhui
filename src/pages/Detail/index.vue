@@ -341,7 +341,7 @@ export default {
   data() {
     return {
       //购买产品的个数
-      skuNum: 0,
+      skuNum: 1,
     }
   },
 

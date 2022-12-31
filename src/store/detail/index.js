@@ -1,6 +1,10 @@
 import { reqGetGoodsInfo ,reqAddOrUpdateShopCart} from "@/api"
+//封装游客身份的模块uuid--
+import {getUUID}from "@/utils/uuid_token"
 const state={
-    goodsInfo:{}
+    goodsInfo:{},
+    //游客临时身份
+    uuid_token:getUUID()
 }
 const mutations={
     GETGOODSINFO(state,goodsInfo){
@@ -28,7 +32,8 @@ const actions={
              //代表加入购物车失败
              return Promise.reject(new Error("faile"))
         }  
-    }
+    },
+    
 }
 const getters={
     categoryView(state){

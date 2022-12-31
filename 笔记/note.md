@@ -76,3 +76,5 @@ css3的新特征:
 13.语音。 
 
 ##本地存储，会话存储一般存的都是字符串，而不是对象
+##使用every可以遍历数组，判断数组中的某个元素是否全为1，可以用在复选框全选判断中
+this.cartInfoList.every(item=>item.isChecked==1)，如果cartinfolist中的所以项中的ischecked都是1，那么就返回true
