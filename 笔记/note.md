@@ -78,3 +78,14 @@ css3的新特征:
 ##本地存储，会话存储一般存的都是字符串，而不是对象
 ##使用every可以遍历数组，判断数组中的某个元素是否全为1，可以用在复选框全选判断中
 this.cartInfoList.every(item=>item.isChecked==1)，如果cartinfolist中的所以项中的ischecked都是1，那么就返回true
+
+##
+Promise.all([p1,p2,p3])
+p1|p2|p3每一个都是一个promise对象，如果有一个promise失败，都失败，如果都成功，返回成功
+
+##
+assets 放的是所以组件公用的静态资源，打包时放在组件文件夹下
+pages静态资源放在dist文件夹下
+
+返回的是Promise.reject(new Error("")),才说明执行失败，从而能被try,catch，catch到失败
+所以当我们想表明这是失败回调时，要返回promise.reject

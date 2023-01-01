@@ -99,13 +99,20 @@ export default {
       width: 1200px;
       margin: 0 auto;
       overflow: hidden;
+      
 
       .loginList {
         float: left;
+        a{
+          padding-left: 10px;
+          color:blue
+        }
+        
 
         p {
           float: left;
           margin-right: 10px;
+          
 
           .register {
             border-left: 1px solid #b3aeae;
