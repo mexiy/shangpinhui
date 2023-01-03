@@ -41,7 +41,7 @@
 前台：需要告诉服务器：谁买的、买的啥、买几个、 支付多少钱、留言信息...
 后台：订单号，这笔交易的一个标识符【支付的】
 
-axios({url:'xxx',methods:'post',data:{a:1}})
+axios({url:'xxx',methods:'post',data:{a:1})
 
 
 3.1微信支付、支付宝支付等等

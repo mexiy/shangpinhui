@@ -60,3 +60,27 @@ export const reqGetCode=(phone)=>requests({url:`/user/passport/sendCode/${phone}
 //用户注册 /api/user/passport/register   post    参数phone,password,code  
 //路径中没有带有参数时，我们可以利用data带参数
 export const register=(data)=>requests({url:"/user/passport/register",data,method:"post"})
+
+//用户登录 /api/user/passport/login  post  参数phone password
+export const login=(data)=>requests({url:"/user/passport/login",data,method:"post"})
+
+//带着token找用户信息 /api/user/passport/auth/getUserInfo  get
+export const reqUserInfo=()=>requests({url:'/user/passport/auth/getUserInfo',method:"get"})
+
+//退出登录/api/user/passport/logout  get
+export const logout=()=>requests({url:'/user/passport/logout',method:'get'})
+
+//获取用户地址信息 /api/user/userAddress/auth/findUserAddressList  get
+export const reqAddressInfo=()=>requests({url:'/user/userAddress/auth/findUserAddressList',method:'get'})
+ 
+//获取订单交易信息 /api/order/auth/trade  get
+export const reqTradeDetail=()=>requests({url:"/order/auth/trade",method:'get'})
+
+//提交订单的接口 /api/order/auth/submitOrder?tradeNo={tradeNo}  post
+export const reqSubmit=(tradeNo,data)=>requests({
+    url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    data,
+    method:'post'
+})
+
+

@@ -5,6 +5,7 @@ import VueRouter from "vue-router"
 Vue.use(VueRouter)
 //引入路由配置
 import routes from "./routes"
+import store from "@/store"
 
 /* 先把VueRouter原型对象的push,先保存一份 */
 let originPush=VueRouter.prototype.push;
@@ -29,7 +30,7 @@ VueRouter.prototype.replace = function(location,resolve,reject){
         originReplace.call(this,location,()=>{},()=>{})
     }
 }
-export default new VueRouter({
+let router= new VueRouter({
     /* 配置路由 */
     routes,
     //滚动行为
@@ -38,4 +39,31 @@ export default new VueRouter({
         return { y: 0 }
       }
     
-})
+});
+//全局守卫
+router.beforeEach((to, from,next) => {
+    //to:可以获取到你要跳转到哪个路由的信息
+    //from可以获得你从哪个路由而来的信息
+    //next:放行函数
+    //next();放行
+    //next('/login') 放行到指定路由当中  next(path)
+    let token = store.state.user.token
+    //用户已经登录
+    if(token){
+
+        //登录之后，去的不是登录界面
+        //获取用户信息
+         store.dispatch("getUserInfo")
+         next()
+        
+    }else{
+        if(to.path=="/addcartsuccess"||to.path=="/shopcart"){
+            next('/login')
+        }else{
+            next()
+        }
+    }
+    
+
+  })
+export default router

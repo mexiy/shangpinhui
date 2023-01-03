@@ -23,6 +23,8 @@ export default {
     //通知vuex发请求，获取数据，存储于仓库当中
     //进行派遣，派发action
     this.$store.dispatch("categoryList");
+
+    
   }
 }
 </script>

@@ -33,7 +33,8 @@ $bus:全局事件总线
 2：发请求
 3：vuex
 4：动态展示组件
-
+##
+if空对象是真
 
 H5的新特性：
 
@@ -89,3 +90,31 @@ pages静态资源放在dist文件夹下
 
 返回的是Promise.reject(new Error("")),才说明执行失败，从而能被try,catch，catch到失败
 所以当我们想表明这是失败回调时，要返回promise.reject
+
+##
+要解决再用户登录状态下时就无法进入登录界面，以及在非登录状态下不能进入购物车
+导航守卫
+    路由守卫总共有7个
+
+全局路由守卫:项目中只要发生路由的变化就可以监听到
+
+beforeEach 前置守卫，跳转之前
+
+affterEach 后置守卫
+
+beforeResolve 解析守卫
+
+路由的守卫
+
+beforeRouterEnter 进入组件之前触发,在Created前面
+
+beforeRouterUpdated 路由更新但是内容不会改变
+
+beforeRouterLeave 离开之前触发,在beforeDestory之前触发
+
+路由独享守卫
+
+beforeEnter 读取路由的信息
+
+##
+13700000000  111111

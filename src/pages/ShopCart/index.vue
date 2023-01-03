@@ -53,14 +53,15 @@
       </div>
       <div class="money-box">
         <div class="chosed">已选择
-          <span>0</span>件商品
+          <span>{{ howMany }}</span>件商品
         </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <!-- <a class="sum-btn"   @click="$router.push('/trade')">结算</a> -->
+          <router-link to="/trade">结算</router-link>
         </div>
       </div>
     </div>
@@ -93,6 +94,14 @@ export default {
     isAllChecked() {
       //判断cartInfoList中每一项的isChecked是否全为1
       return this.cartInfoList.every(item => item.isChecked == 1)
+    },
+    //统计一共买了几件东西
+    howMany(){
+      let number=0
+      this.cartInfoList.forEach(element=>{
+        number+=element.skuNum
+      })
+      return number
     }
   },
   methods: {

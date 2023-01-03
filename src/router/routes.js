@@ -6,6 +6,8 @@ import Search from "@/pages/Search"
 import Detail from "@/pages/Detail"
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from "@/pages/ShopCart"
+import Trade from "@/pages/Trade"
+import Pay from "@/pages/Pay"
 //路由配置
 export default [
         {
@@ -18,6 +20,17 @@ export default [
             path:'/login',
             component:Login,
             meta:{show:false}
+        },
+        {
+            name:'pay',
+            path:'/pay',
+            component:Pay,
+            meta:{show:true}
+        },
+        {
+            path:'/trade',
+            component:Trade,
+            meta:{show:true}
         },
         {
             path:'/register',
