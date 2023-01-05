@@ -86,8 +86,8 @@
       </div>
     </div>
     <div class="sub clearFix">
-
-      <a class="subBtn" @click.prevent="submitOrder" href="#">提交订单</a>
+     
+      <a class="subBtn" @click.prevent="submitOrder" href="#" >提交订单</a>
     </div>
   </div>
 </template>
@@ -174,8 +174,10 @@ export default {
      else{
       alert(result.data)
      }
+    },
+    
     }
-  }
+  
 }
 </script>
 

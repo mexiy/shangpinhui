@@ -57,7 +57,8 @@ router.beforeEach((to, from,next) => {
          next()
         
     }else{
-        if(to.path=="/addcartsuccess"||to.path=="/shopcart"){
+        //未登录时，若是去以下页面，都眺往登录页面
+        if(to.path=="/addcartsuccess"||to.path=="/shopcart"||to.path=="/pay"||to.path=="/center"||to.path=="/paysuccess"||to.path=="/trade"){
             next('/login')
         }else{
             next()

@@ -3,11 +3,24 @@ import Home from "@/pages/Home"
 import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import Search from "@/pages/Search"
+//商品详情页面
 import Detail from "@/pages/Detail"
+//加入购物车成功页面
 import AddCartSuccess from "@/pages/AddCartSuccess"
+//购物车页面
 import ShopCart from "@/pages/ShopCart"
+//未支付订单详情页面
 import Trade from "@/pages/Trade"
+//支付页面
 import Pay from "@/pages/Pay"
+//支付成功页面
+import PaySuccess from "@/pages/PaySuccess"
+//订单中心
+import Center from "@/pages/Center"
+//引入二级路由组件
+import MyOrder from '@/pages/Center/myOrder'
+import GroupOrder from "@/pages/Center/groupOrder"
+
 //路由配置
 export default [
         {
@@ -20,6 +33,31 @@ export default [
             path:'/login',
             component:Login,
             meta:{show:false}
+        },
+        {
+            path:'/paysuccess',
+            component:PaySuccess,
+            meta:{show:true}
+        },
+        {
+            path:'/center',
+            component:Center,
+            meta:{show:true},
+            //二级路由
+            children:[
+                {
+                    path:'myorder',
+                    component:MyOrder,
+                },
+                {
+                  path:'grouporder',
+                  component:GroupOrder,  
+                },{
+                    //重定向，默认显示我的订单
+                    path:'/center',
+                    redirect:'/center/myorder'
+                }
+            ]
         },
         {
             name:'pay',

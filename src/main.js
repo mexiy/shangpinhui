@@ -12,15 +12,17 @@ import "@/mock/mockServe"
 import 'swiper/css/swiper.css'
 //统一接口api文件夹里面全部请求函数
 import * as API from '@/api'
-
+//引入组件
+import {MessageBox} from "element-ui"
 //将一个组件注册为全局组件
 /* 第一个参数：全局组件的名字，第二个参数：哪一个组件 */
 Vue.component(TypeNav.name,TypeNav)
 Vue.component(Carousel.name,Carousel)
 Vue.component(Pagination.name,Pagination)
 Vue.config.productionTip = false
-
-
+//注册element-ui组件
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
 //引入仓库
 import store from "@/store"
 new Vue({

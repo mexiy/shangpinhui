@@ -7,8 +7,8 @@
           <span class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span>
         </h4>
         <div class="paymark">
-          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{ $route.query.orderId }}</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥17,654</em></span>
+          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{ orderId }}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">{{ payInfo.totalFee }}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -65,14 +65,15 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <!-- <router-link class="btn" to="/paysuccess">立即支付</router-link> -->
+          <a class="btn" @click="open">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
             <h5>其他支付方式</h5>
           </div>
           <div class="step-cont">
-            <span><a href="weixinpay.html" target="_blank">微信支付</a></span>
+            <span><a href="weixinpay.html" >微信支付</a></span>
             <span>中国银联</span>
           </div>
         </div>
@@ -82,8 +83,96 @@
 </template>
 
 <script>
+import QRCode from "qrcode"
   export default {
     name: 'Pay',
+    data(){
+      return{
+        payInfo:{},
+        timer:null,
+        //支付状态码
+        code:''
+      }
+    },
+    computed:{
+      orderId(){
+        return this.$route.query.orderId
+      }
+    },
+    mounted(){
+     this.getPayInfo()
+     
+    },
+    methods:{
+      //获取支付订单信息
+     async getPayInfo(){
+        let result=await this.$API.reqPayInfo(this.orderId)
+        if(result.code==200){
+          this.payInfo=result.data       
+         }else{
+          alert('faile')
+         }
+      },
+      //打开付款页面，扫码支付，用的是element-ui
+   async open() {
+      //生成二维码,使用qrcode生成
+      let url= await QRCode.toDataURL(this.payInfo.codeUrl)
+        this.$alert(`<img src=${url} /}>`, '请扫描二维码', {
+          //是否将 message 属性作为 HTML 片段处理
+          dangerouslyUseHTMLString: true,
+          //居中
+          center:true,
+          //是否要取消按钮
+          showCancelButton:true,
+          //取消按钮文本
+          cancelButtonText:'支付遇见问题',
+          //确定按钮文本
+          confirmButtonText:'已支付成功',
+          //是否要右上角的x
+          showClose:false,
+          //关闭前的回调
+          beforeClose:(action, instance, done)=>{
+            //action代表当前点击的是确定还是取消，若点击的是确定，则action的值为confirm，若点击的是取消，则action的值为cancel
+            //instance 为 MessageBox 实例，可以通过它访问实例上的属性和方法；done 用于关闭 MessageBox 实例,可以用done手动关闭弹出框
+            //我们可以手动点击已完成支付，进行跳转，模拟，支付好的页面
+            if(action=="confirm"){
+              //如果支付成功，清除定时器,并重置，停止继续对支付状态的访问
+              clearInterval(this.timer)
+              this.timer=null
+              //关闭弹窗
+              done()
+              //路由跳转
+              this.$router.push('/paysuccess')
+            }else{
+              //点击的取消
+              alert('请确认支付')
+            }
+          }
+        });
+        //需要获取订单支付状态，成功还是失败
+       //用户再调出二维码后，需要一直向服务器发送请求，获得订单支付状态  长轮询
+        //setInterval() 方法会不停地调用函数，直到 clearInterval()被调用或窗口被关闭
+        //假设10s后，支付成功，进入支付成功页面
+        if(!this.timer){
+          this.timer=setInterval(async ()=>{
+            //发请求
+          let result=await this.$API.reqPayStatus(this.orderId)
+          //如果支付成功，code==200,
+          console.log(result)
+          if(result.code=='205'){
+             //关闭弹出框
+            this.$msgbox.close()
+             //清除定时器
+             clearInterval(this.timer);
+              this.timer=null;
+             //跳转到下一个路由
+             this.$router.push('/paysuccess') 
+          }
+          },10000)
+         
+        }
+      }
+    }
   }
 </script>
 
