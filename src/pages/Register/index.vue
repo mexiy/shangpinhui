@@ -8,29 +8,34 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" v-model="phone" >
-        <span class="error-msg">错误提示信息</span>
+        <input placeholder="请输入你的手机号" v-model="phone" name="phone" v-validate="{ required: true, regex: /^1\d{10}$/ }"
+          :class="{ invalid: errors.has('phone') }" />
+        <span class="error-msg">{{ errors.first("phone") }}</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" :value="code">
+        <input placeholder="请输入你的验证码" v-model="code" name="code" v-validate="{ required: true, regex: /^\d{6}$/ }"
+          :class="{ invalid: errors.has('code') }" />
         <button style="width:100px;height:30px" @click="getCode(phone)">获取验证码</button>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("code") }}</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="password" placeholder="请输入你的登录密码" v-model="password">
-        <span class="error-msg">错误提示信息</span>
+        <input placeholder="请输入你的密码" v-model="password" name="password"
+          v-validate="{ required: true, regex: /^[0-9A-Za-z]{8,20}$/ }" :class="{ invalid: errors.has('password') }" />
+        <span class="error-msg">{{ errors.first("password") }}</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="password" placeholder="请输入确认密码" v-model="password1">
-        <span class="error-msg">错误提示信息</span>
+        <input placeholder="请确认你的密码" v-model="password1" name="password1" v-validate="{ required: true, is: password }"
+          :class="{ invalid: errors.has('password1') }" />
+        <span class="error-msg">{{ errors.first("password1") }}</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" :checked="agree">
+        <input type="checkbox" v-model="agree" name="agree" v-validate="{ required: true, 'agree': true }"
+          :class="{ invalid: errors.has('agree') }" />
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("agree") }}</span>
       </div>
       <div class="btn">
         <button @click="userRegister">完成注册</button>
@@ -58,160 +63,165 @@
 
 <script>
 import { mapState } from 'vuex';
-  export default {
-    name: 'Register',
-    data(){
-      return{
-        //手机号
-        phone:"",
-        //验证码
-        code:'',
-        //密码
-        password:'',
-        //确认密码
-        password1:'',
-        //是否统一协议
-        agree:true,
-      }
-    },
-    methods:{
-    async getCode(phone){
-        try {
-          //我们需要知道是否验证码生成成功，在进行挂载数据，所以要使用异步操作，不然可能挂载失败
-        await this.$store.dispatch('getCode',phone)
-        this.code=this.$store.state.user.code
-        } catch (error) {
-          alert(error.message)
-        }
-      },
-    async userRegister(){
+export default {
+  name: 'Register',
+  data() {
+    return {
+      //手机号
+      phone: "",
+      //验证码
+      code: '',
+      //密码
+      password: '',
+      //确认密码
+      password1: '',
+      //是否统一协议
+      agree: true,
+    }
+  },
+  methods: {
+    async getCode(phone) {
       try {
-         //获取请求参数
-         const{phone,password,code,password1}=this
-         //做一个简单判断
-        phone&&code&&password==password1&&await this.$store.dispatch("userRegister",{phone,password,code})
-        //如果成功路由跳转到等登录界面
-        this.$router.push("/login")
+        //我们需要知道是否验证码生成成功，在进行挂载数据，所以要使用异步操作，不然可能挂载失败
+        await this.$store.dispatch('getCode', phone)
+        this.code = this.$store.state.user.code
       } catch (error) {
         alert(error.message)
       }
+    },
+    //用户注册
+    async userRegister() {
+      //当表单全部验证通过返回为true
+      const success = await this.$validator.validateAll(); //全部表单验证
+      if (success) {
+        try {
+          //获取请求参数
+          const { phone, password, code, password1 } = this
+          await this.$store.dispatch("userRegister", { phone, password, code })
+          //如果成功路由跳转到等登录界面
+          this.$router.push("/login")
+        } catch (error) {
+          alert(error.message)
+        }
       }
+
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-  .register-container {
-    .register {
-      width: 1200px;
-      height: 445px;
-      border: 1px solid rgb(223, 223, 223);
-      margin: 0 auto;
+.register-container {
+  .register {
+    width: 1200px;
+    height: 445px;
+    border: 1px solid rgb(223, 223, 223);
+    margin: 0 auto;
 
-      h3 {
-        background: #ececec;
-        margin: 0;
-        padding: 6px 15px;
-        color: #333;
-        border-bottom: 1px solid #dfdfdf;
-        font-size: 20.04px;
-        line-height: 30.06px;
+    h3 {
+      background: #ececec;
+      margin: 0;
+      padding: 6px 15px;
+      color: #333;
+      border-bottom: 1px solid #dfdfdf;
+      font-size: 20.04px;
+      line-height: 30.06px;
 
-        span {
-          font-size: 14px;
-          float: right;
+      span {
+        font-size: 14px;
+        float: right;
 
-          a {
-            color: #e1251b;
-          }
-        }
-      }
-
-      div:nth-of-type(1) {
-        margin-top: 40px;
-      }
-
-      .content {
-        padding-left: 390px;
-        margin-bottom: 18px;
-        position: relative;
-
-        label {
-          font-size: 14px;
-          width: 96px;
-          text-align: right;
-          display: inline-block;
-        }
-
-        input {
-          width: 270px;
-          height: 38px;
-          padding-left: 8px;
-          box-sizing: border-box;
-          margin-left: 5px;
-          outline: none;
-          border: 1px solid #999;
-        }
-
-        img {
-          vertical-align: sub;
-        }
-
-        .error-msg {
-          position: absolute;
-          top: 100%;
-          left: 495px;
-          color: red;
-        }
-      }
-
-      .controls {
-        text-align: center;
-        position: relative;
-
-        input {
-          vertical-align: middle;
-        }
-
-        .error-msg {
-          position: absolute;
-          top: 100%;
-          left: 495px;
-          color: red;
-        }
-      }
-
-      .btn {
-        text-align: center;
-        line-height: 36px;
-        margin: 17px 0 0 55px;
-
-        button {
-          outline: none;
-          width: 270px;
-          height: 36px;
-          background: #e1251b;
-          color: #fff !important;
-          display: inline-block;
-          font-size: 16px;
+        a {
+          color: #e1251b;
         }
       }
     }
 
-    .copyright {
-      width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      line-height: 24px;
+    div:nth-of-type(1) {
+      margin-top: 40px;
+    }
 
-      ul {
-        li {
-          display: inline-block;
-          border-right: 1px solid #e4e4e4;
-          padding: 0 20px;
-          margin: 15px 0;
-        }
+    .content {
+      padding-left: 390px;
+      margin-bottom: 18px;
+      position: relative;
+
+      label {
+        font-size: 14px;
+        width: 96px;
+        text-align: right;
+        display: inline-block;
+      }
+
+      input {
+        width: 270px;
+        height: 38px;
+        padding-left: 8px;
+        box-sizing: border-box;
+        margin-left: 5px;
+        outline: none;
+        border: 1px solid #999;
+      }
+
+      img {
+        vertical-align: sub;
+      }
+
+      .error-msg {
+        position: absolute;
+        top: 100%;
+        left: 495px;
+        color: red;
+      }
+    }
+
+    .controls {
+      text-align: center;
+      position: relative;
+
+      input {
+        vertical-align: middle;
+      }
+
+      .error-msg {
+        position: absolute;
+        top: 100%;
+        left: 495px;
+        color: red;
+      }
+    }
+
+    .btn {
+      text-align: center;
+      line-height: 36px;
+      margin: 17px 0 0 55px;
+
+      button {
+        outline: none;
+        width: 270px;
+        height: 36px;
+        background: #e1251b;
+        color: #fff !important;
+        display: inline-block;
+        font-size: 16px;
       }
     }
   }
+
+  .copyright {
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 24px;
+
+    ul {
+      li {
+        display: inline-block;
+        border-right: 1px solid #e4e4e4;
+        padding: 0 20px;
+        margin: 15px 0;
+      }
+    }
+  }
+}
 </style>

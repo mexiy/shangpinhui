@@ -10,4 +10,6 @@ module.exports= {
       },
     },
   },
+  //打包时去除map
+  productionSourceMap:false
 }

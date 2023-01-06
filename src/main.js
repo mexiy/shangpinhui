@@ -25,6 +25,23 @@ Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
 //引入仓库
 import store from "@/store"
+//引入图片懒加载插件
+import VueLazyload from 'vue-lazyload'
+const loadimage = require('@/assets/lazyload.gif')
+//注册该组件
+Vue.use(VueLazyload, {
+  //懒加载默认图片
+  loading: loadimage,
+
+})
+//测试自定义组件(插件)
+import myPlugins from '@/plugins/myPlugins'
+Vue.use(myPlugins,{
+  name:'upper'
+})
+
+//引入表单验证插件
+import "@/plugins/validate";
 new Vue({
   render: h => h(App),
   //配置全局事件总线$bus

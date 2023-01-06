@@ -49,7 +49,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <router-link :to="`/detail/${goods.id}`">
-                      <img :src="goods.defaultImg" />
+                      <img v-lazy="goods.defaultImg" />
                     </router-link>  
                   </div>
                   <div class="price">
@@ -64,7 +64,7 @@
                     }}</a>
                   </div>
                   <div class="commit">
-                    <i class="command">已有<span>2000</span>人评价</i>
+                    <i class="command">已有<span>2023</span>人评价</i>
                   </div>
                   <div class="operate">
                     <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>

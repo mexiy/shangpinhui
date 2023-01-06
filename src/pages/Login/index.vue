@@ -80,7 +80,17 @@ export default {
       const { phone, password } =this;
       (phone && password) &&await this.$store.dispatch("userLogin", { phone, password });
       //跳转到home
-      (phone && password) &&this.$router.push("/home")
+      //登录的路由组件，看路由当中是否包含query参数，有：调到query参数指定路由，没有，调到home
+      
+      //保存query中的地址
+      let toPath = this.$route.query.redirect
+      //有query跳到query中的地址
+      if(toPath)
+      this.$router.push(toPath)
+      //没query跳到home
+      else{
+          (phone && password) &&this.$router.push("/home") 
+      }
      } catch (error) {
       alert(error.message)
      }

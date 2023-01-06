@@ -57,9 +57,13 @@ router.beforeEach((to, from,next) => {
          next()
         
     }else{
-        //未登录时，若是去以下页面，都眺往登录页面
-        if(to.path=="/addcartsuccess"||to.path=="/shopcart"||to.path=="/pay"||to.path=="/center"||to.path=="/paysuccess"||to.path=="/trade"){
-            next('/login')
+        //我们还要实现，在未登录状态时，想要去往哪个页面，在登陆后，要去往该页面，我们需要保存，是想要前往哪个页面
+        //未登录时，不能进入与支付相关的页面，若是去以下页面，都眺往登录页面
+        //str.indexof(string) ,若str中没有string则返回-1，若有返回对应下标
+        if(to.path.indexOf("/addcartsuccess")!=-1||to.path.indexOf("/shopcart")!=-1||to.path.indexOf('/pay"')!=-1||to.path.indexOf("/center")!=-1||to.path.indexOf("/trade")!=-1){
+            //登录之后，将要去的位置通过query，放在地址栏上
+            //to.path要去的页面
+            next('/login?redirect='+to.path)
         }else{
             next()
         }

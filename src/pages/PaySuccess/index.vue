@@ -20,6 +20,14 @@
 <script>
   export default {
     name: 'PaySuccess',
+    beforeRouteEnter (to, from, next) {
+      //不能获取this
+      if(from.path=="/pay"){
+        next()
+      }else(
+        next(false)
+      )
+    }
   }
 </script>
 
