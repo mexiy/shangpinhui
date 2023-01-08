@@ -88,6 +88,8 @@ export default {
                     font-weight: 400;
                     color: #666;
                     text-decoration: none;
+                    border-radius: 6px;
+                    
                 }
             }
 

@@ -102,7 +102,7 @@ export default [
     {
         name: 'search',
         //带问号表示可以传递也可以不传递
-        path: '/search:keyword?',
+        path: '/search/:keyword?',
         component: ()=>import('@/pages/Search'),
         meta: { show: true }
         /* props:true */

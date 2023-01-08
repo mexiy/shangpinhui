@@ -14,6 +14,7 @@
                 v-for="(c1, index) in categoryList"
                 :key="c1.categoryId"
                 :class="{ cur: currentIndex == index }"
+                
               >
                 <h3 @mouseenter="changIndex(index)">
                   <!-- 绑定自定义属性的方法：data-(驼峰式命名的自定义属性名)
@@ -28,6 +29,7 @@
                 </h3>
                 <!-- 二级三级分类，鼠标没移到对应的一级分类时，二三级display为none
           当我们鼠标放在某个一级分类上，就将其对应的二三级分类的display设置为block -->
+             <transition name="itemlist">
                 <div
                   class="item-list clearfix"
                   :style="{ display: currentIndex == index ? 'block' : 'none' }"
@@ -57,6 +59,7 @@
                     </dl>
                   </div>
                 </div>
+              </transition>
               </div>
             </div>
           </div>
@@ -165,6 +168,11 @@ export default {
       this.show = true;
     },
   },
+  watch:{
+    $route(){
+      this.show=false
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -204,12 +212,12 @@ export default {
       top: 45px;
       width: 210px;
       height: 461px;
-      position: absolute;
-      background: #fafafa;
+      background:#f9ca24;
       z-index: 999;
-      /* overflow: hidden; */
+     
 
       .all-sort-list2 {
+  
         .item {
           h3 {
             line-height: 27.2px;
@@ -229,7 +237,8 @@ export default {
             position: absolute;
             width: 734px;
             min-height: 460px;
-            background: #f7f7f7;
+            //二三级菜单背景颜色
+            background: #f6e58d;
             left: 210px;
             border: 1px solid #ddd;
             top: 0;
@@ -289,11 +298,13 @@ export default {
     //定义动画的样式
     //动画进入前
     .sort-enter {
-      height: 0px;
+      opacity: 0;
+    
     }
     //动画进入后
     .sort-enter-to {
-      height: 461px;
+      opacity: 1;
+
     }
     //设置动画的时间，速率
     .sort-enter-active {

@@ -34,13 +34,13 @@ export default {
                             /* direction: 'vertical', // 垂直切换选项 */
                             //不开启上述，默认是水平的
                             loop: true, // 循环模式选项
-
                             // 如果需要分页器
                             pagination: {
                                 el: '.swiper-pagination',
                                 //点击小球时也可以切换
                                 clickable: true
                             },
+                            autoplay:true,
 
                             // 如果需要前进后退按钮
                             navigation: {

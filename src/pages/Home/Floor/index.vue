@@ -116,10 +116,13 @@ export default {
 
       .fr {
         float: right;
+        
+       
 
         .nav-tabs {
           margin: 10px 0 0;
           display: inline-block;
+          
 
           li {
             float: left;
@@ -128,7 +131,7 @@ export default {
             a {
               padding-top: 1px;
               font-weight: 400;
-              background-color: #fff;
+              opacity: 1;
 
               &::after {
                 content: "|";
