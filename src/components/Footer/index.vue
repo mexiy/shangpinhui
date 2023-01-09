@@ -112,6 +112,7 @@
  
   .footer {
           background-color: #c23616;
+          color:white;
   
           .footer-container {
               width: 1200px;
@@ -134,8 +135,9 @@
                       }
   
                       .footerItemCon {
+                        margin-top: 10px;
                           li {
-                              line-height: 18px;
+                              line-height: 30px;
                           }
                       }
   
@@ -153,6 +155,7 @@
   
                       li {
                           display: inline;
+                          
   
                           .space {
                               border-left: 1px solid #666;

@@ -8,10 +8,10 @@
           
         </ul>
       </div>
-      <div class="ext">
+      <!-- <div class="ext">
         <a href="javascript:void(0);" class="sui-btn">多选</a>
         <a href="javascript:void(0);">更多</a>
-      </div>
+      </div> -->
     </div>
     <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.attrId">
       <div class="fl key">{{ attr.attrName }}</div>
@@ -53,6 +53,7 @@ import { mapGetters } from 'vuex';
     border: 1px solid #ddd;
     margin-bottom: 5px;
     overflow: hidden;
+    background-color: white;
 
     .logo {
       border-top: 0;
