@@ -22,7 +22,7 @@
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input placeholder="请输入你的密码" v-model="password" name="password"
+        <input placeholder="数字以及大小写字母构成，长度在8到20之间" v-model="password" name="password"
           v-validate="{ required: true, regex: /^[0-9A-Za-z]{8,20}$/ }" :class="{ invalid: errors.has('password') }" />
         <span class="error-msg">{{ errors.first("password") }}</span>
       </div>

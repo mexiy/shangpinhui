@@ -54,7 +54,13 @@
             </div>
             <div class="footerItem">
               <h4>帮助中心</h4>
-              <img src="./images/wx_cz.jpg" />
+              <ul class="footerItemCon"> 
+              <li>添加微信</li>
+              <li>联系地址</li>
+              <li>添加QQ</li>
+              <li>用户手册</li>
+              <li>帮助</li>
+            </ul>
             </div>
           </div>
           <div class="copyright">
@@ -113,8 +119,10 @@
   .footer {
           background-color: #c23616;
           color:white;
+          width: 100%;
   
           .footer-container {
+            background-color: #c23616;
               width: 1200px;
               margin: 0 auto;
               padding: 0 15px;

@@ -123,6 +123,7 @@ export default {
     line-height: 30px;
 
     .container {
+      background-color:#eb4d4b;
       width: 1200px;
       margin: 0 auto;
       overflow: hidden;
