@@ -415,6 +415,7 @@ export default {
   .con {
     width: 1200px;
     margin: 15px auto 0;
+    background-color:white;
 
     .conPoin {
       padding: 9px 15px 9px 0;

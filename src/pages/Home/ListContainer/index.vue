@@ -22,57 +22,57 @@
           </ul>
         </div>
         <ul class="lifeservices">
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">话费</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">机票</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">电影票</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">游戏</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">彩票</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">加油站</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">酒店</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">火车票</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">众筹</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">理财</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">礼品卡</span>
           </li>
-          <li class="life-item">
+          <li class="life-item"  @click="jump">
             <i class="list-item"></i>
             <span class="service-intro">白条</span>
           </li>
         </ul>
         <div class="ads">
-          <img src="./images/ad1.png" />
+          <img src="./images/ad1.png" @click="jump" />
         </div>
       </div>
     </div>
@@ -94,6 +94,12 @@ export default {
     bannerList:state=>state.home.bannerList
   })
   },
+  methods:{
+     //当点击图片时进行跳转
+     jump(){
+            this.$router.push('/search')      
+            }
+  }
   //由于轮播图组件化了，就不需要以下代码
   /* watch:{
     //监听bannerList数据的变化：因为这条数据发生过变化--有空数组变为数组里边有四个元素

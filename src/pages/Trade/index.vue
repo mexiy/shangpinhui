@@ -205,7 +205,8 @@ export default {
 
     .address {
       padding-left: 20px;
-      margin-bottom: 15px;
+      
+      background-color:white;
 
       .username {
         float: left;

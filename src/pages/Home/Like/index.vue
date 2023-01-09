@@ -1,6 +1,6 @@
 <template>
  <!-- 猜你喜欢 -->
- <div class="like">
+ <div class="like" @click="jump">
         <div class="py-container">
           <div class="title">
             <h3 class="fl">猜你喜欢</h3>
@@ -57,7 +57,11 @@
 </template>
 <script>
 export default {
-
+  methods:{
+    jump(){
+            this.$router.push('/search')      
+            }
+  }
 }
 </script>
 <style scoped lang="less">

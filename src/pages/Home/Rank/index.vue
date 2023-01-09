@@ -1,6 +1,6 @@
 <template>
  <!-- 商品排行 -->
- <div class="rank">
+ <div class="rank" @click="jump">
         <div class="tab">
           <div class="tab-tit clearfix">
             <a href="javascript:;" class="on">
@@ -97,7 +97,11 @@
 </template>
 <script>
 export default {
-
+  methods:{
+    jump(){
+            this.$router.push('/search')      
+            }
+  }
 }
 </script>
 <style scoped lang="less">

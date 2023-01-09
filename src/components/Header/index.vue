@@ -20,17 +20,17 @@
           <router-link to="/center/myorder">我的订单</router-link>
           <router-link to="/shopcart">我的购物车</router-link>
 
-          <a href="###">我的尚品汇</a>
+          <a href="###" @click="message">我的尚品汇</a>
 
-          <a href="###">尚品汇会员</a>
+          <a href="###" @click="message">尚品汇会员</a>
 
-          <a href="###">企业采购</a>
+          <a href="###" @click="message">企业采购</a>
 
-          <a href="###">关注尚品汇</a>
+          <a href="###" @click="message">关注尚品汇</a>
 
-          <a href="###">合作招商</a>
+          <a href="###" @click="message">合作招商</a>
 
-          <a href="###">商家后台</a>
+          <a href="###" @click="message">商家后台</a>
         </div>
       </div>
     </div>
@@ -93,6 +93,9 @@ export default {
       } catch (error) {
         alert(error.message)
       }
+    },
+    message(){
+      alert('功能暂未上线，敬请期待!!!')
     }
   },
   mounted() {
@@ -118,8 +121,6 @@ export default {
     background-color:#eb4d4b;
     height: 40px;
     line-height: 30px;
-    border-radius: 13px;
-    
 
     .container {
       width: 1200px;
@@ -134,7 +135,10 @@ export default {
 
         a {
           padding-left: 10px;
-          color: blue
+          color: white;
+          &:hover {
+            color:blue
+          }
         }
 
 

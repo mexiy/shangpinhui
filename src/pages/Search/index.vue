@@ -314,10 +314,13 @@ export default {
   .py-container {
     width: 1200px;
     margin: 0 auto;
+    
 
     .bread {
       margin-bottom: 5px;
       overflow: hidden;
+      background-color: #e74c3c;
+     
 
       .sui-breadcrumb {
         padding: 3px 15px;
@@ -331,7 +334,7 @@ export default {
           line-height: 18px;
 
           a {
-            color: #666;
+            color:white;
             text-decoration: none;
 
             &:hover {

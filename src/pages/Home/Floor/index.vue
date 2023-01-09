@@ -1,6 +1,6 @@
 <template>
   <!--楼层-->
-  <div class="floor">
+  <div class="floor" @click="jump">
     <div class="py-container">
       <div class="title clearfix">
         <!-- name -->
@@ -93,7 +93,11 @@ export default {
          el: '.swiper-scrollbar',
        }, })  */
   },
- 
+  methods:{
+    jump(){
+            this.$router.push('/search')      
+            }
+  }
 }
 </script>
 <style scoped lang="less">

@@ -1,6 +1,6 @@
 <template>
  <!--商标-->
- <div class="brand">
+ <div class="brand" @click="jump">
         <div class="py-container">
           <ul class="brand-list">
             <li class="brand-item">
@@ -38,7 +38,13 @@
       </div>
 </template>
 <script>
-export default {}
+export default {
+  methods:{
+    jump(){
+            this.$router.push('/search')      
+            }
+  }
+}
 </script>
 <style scoped lang="less">
  .brand {

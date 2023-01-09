@@ -4,28 +4,34 @@
       <ul class="recommend">
         <li class="clock">
           <div class="time">
-            <img src="./images/clock.png" />
+            <img src="./images/clock.png" @click="jump"/>
             <h3>今日推荐</h3>
           </div>
         </li>
         <li class="banner">
-          <img src="./images/today01.png" />
+          <img src="./images/today01.png" @click="jump"/>
         </li>
         <li class="banner">
-          <img src="./images/today02.png" />
+          <img src="./images/today02.png" @click="jump" />
         </li>
         <li class="banner">
-          <img src="./images/today03.png" />
+          <img src="./images/today03.png" @click="jump"/>
         </li>
         <li class="banner">
-          <img src="./images/today04.png" />
+          <img src="./images/today04.png" @click="jump"/>
         </li>
       </ul>
     </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  methods:{
+    jump(){
+            this.$router.push('/search')      
+            }
+  }
+};
 </script>
 <style scoped lang="less">
 .today-recommend {

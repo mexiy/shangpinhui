@@ -116,7 +116,7 @@ import QRCode from "qrcode"
       //打开付款页面，扫码支付，用的是element-ui
    async open() {
       //生成二维码,使用qrcode生成
-      let url= await QRCode.toDataURL(this.payInfo.codeUrl)
+      let url= await QRCode.toDataURL("无需支付")
         this.$alert(`<img src=${url} /}>`, '请扫描二维码', {
           //是否将 message 属性作为 HTML 片段处理
           dangerouslyUseHTMLString: true,

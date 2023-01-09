@@ -208,6 +208,7 @@ export default {
   }
 
   .cart-main {
+    background-color: white;
     .cart-th {
       background: #f5f5f5;
       border: 1px solid #ddd;
@@ -337,6 +338,8 @@ export default {
   }
 
   .cart-tool {
+    
+    background-color: white;
     overflow: hidden;
     border: 1px solid #ddd;
 
@@ -346,6 +349,7 @@ export default {
       float: left;
 
       span {
+        
         vertical-align: middle;
       }
 

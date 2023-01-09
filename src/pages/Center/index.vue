@@ -166,6 +166,7 @@ import groupOrder from "./groupOrder"
             // 表单内容
             .orders {
               font-size: 12px;
+              background-color: #fff;
 
               a {
                 &:hover {

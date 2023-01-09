@@ -38,8 +38,10 @@
     border: 1px solid rgb(211, 211, 211);
     width: 1200px;
     width: 1148px;
+    background-color: #fff;
 
     .success {
+      
       width: 500px;
       margin: 0 auto;
 

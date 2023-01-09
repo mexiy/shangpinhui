@@ -3,7 +3,7 @@
     <div class="swiper-container" id="floor2Swiper" ref="cur">
         <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(carousel, index) in list" :key="carousel.id">
-                <img :src="carousel.imgUrl" />
+                <img :src="carousel.imgUrl" @click="jump"/>
             </div>
         </div>
         <!-- 如果需要分页器 -->
@@ -55,6 +55,12 @@ export default {
                         })
                 })
             }
+        }
+    },
+    methods:{
+        //当点击图片时进行跳转
+        jump(){
+            this.$router.push('/search')
         }
     }
 };

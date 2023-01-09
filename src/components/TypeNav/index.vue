@@ -167,6 +167,7 @@ export default {
     enterShow() {
       this.show = true;
     },
+    
   },
   watch:{
     $route(){
